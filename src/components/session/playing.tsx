@@ -91,8 +91,8 @@ const Playing = ({ categories, decision, duration, makeChoice, setIsPlayingDone 
   }, [])
 
   return (
-    <Stack margin="auto" spacing={2}>
-      <Typography ref={contentsRef} sx={{ textAlign: 'center' }} variant="h2">
+    <Stack margin="auto" spacing={2} sx={{ maxWidth: '400px', textAlign: 'center', width: '90%' }}>
+      <Typography ref={contentsRef} variant="h2">
         Letter: {category}
       </Typography>
       {getPrompts()}
