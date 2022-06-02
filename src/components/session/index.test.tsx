@@ -6,7 +6,7 @@ import React from 'react'
 import { mocked } from 'jest-mock'
 
 import * as sessionService from '@services/sessions'
-import { decisions, session, sessionId, user, userId } from '@test/__mocks__'
+import { decisions, expectedPointJsonPatch, session, sessionId, user, userId } from '@test/__mocks__'
 import GameSession from './index'
 import Logo from '@components/logo'
 
@@ -174,6 +174,17 @@ describe('Session component', () => {
         expect(await screen.findByText(/Historical Figures/i)).toBeInTheDocument()
       })
 
+      test('expect clicking FAB scrolls', async () => {
+        render(<GameSession sessionId={sessionId} setAuthState={mockSetAuthState} setShowLogin={mockSetShowLogin} />)
+
+        const faButton = (await screen.findByLabelText(/seconds remaining/i)) as HTMLButtonElement
+        await act(async () => {
+          faButton.click()
+        })
+
+        expect(window.HTMLElement.prototype.scrollIntoView).toHaveBeenCalled()
+      })
+
       test('expect pointing done when submit clicked', async () => {
         mocked(sessionService).fetchSession.mockResolvedValueOnce({
           ...session,
@@ -237,122 +248,11 @@ describe('Session component', () => {
         })
 
         expect(mocked(sessionService).updateDecisions).toHaveBeenCalledWith('aeio', '+15551234567', expect.anything())
-        expect(mocked(sessionService).updateDecisions).toHaveBeenCalledWith('aeio', '+15551234567', [
-          {
-            op: 'test',
-            path: '/points/+15551234567/V',
-            value: {
-              '1': 0,
-              '10': 0,
-              '2': 0,
-              '3': 0,
-              '4': 0,
-              '5': 0,
-              '6': 0,
-              '7': 0,
-              '8': 0,
-              '9': 0,
-            },
-          },
-          {
-            op: 'remove',
-            path: '/points/+15551234567/V',
-          },
-          {
-            op: 'test',
-            path: '/points/+15551234567/I/10',
-            value: 1,
-          },
-          {
-            op: 'replace',
-            path: '/points/+15551234567/I/10',
-            value: 0,
-          },
-          {
-            op: 'test',
-            path: '/points/+15551234567/I/7',
-            value: 1,
-          },
-          {
-            op: 'replace',
-            path: '/points/+15551234567/I/7',
-            value: 0,
-          },
-          {
-            op: 'add',
-            path: '/points/+15551234567/K',
-            value: {
-              '1': 0,
-              '10': 0,
-              '2': 0,
-              '3': 0,
-              '4': 0,
-              '5': 0,
-              '6': 0,
-              '7': 0,
-              '8': 0,
-              '9': 0,
-            },
-          },
-          {
-            op: 'add',
-            path: '/points/+15551234567/N',
-            value: {
-              '1': 0,
-              '10': 0,
-              '2': 0,
-              '3': 0,
-              '4': 0,
-              '5': 0,
-              '6': 0,
-              '7': 0,
-              '8': 0,
-              '9': 0,
-            },
-          },
-          {
-            op: 'add',
-            path: '/points/+15551234568',
-            value: {
-              I: {
-                '1': 0,
-                '10': 0,
-                '2': 0,
-                '3': 0,
-                '4': 0,
-                '5': 0,
-                '6': 0,
-                '7': 0,
-                '8': 0,
-                '9': 0,
-              },
-              K: {
-                '1': 0,
-                '10': 1,
-                '2': 1,
-                '3': 1,
-                '4': 0,
-                '5': 2,
-                '6': 0,
-                '7': 0,
-                '8': 0,
-                '9': 0,
-              },
-              N: {
-                '1': 0,
-                '10': 1,
-                '2': 1,
-                '3': 0,
-                '4': 0,
-                '5': 1,
-                '6': 0,
-                '7': 0,
-                '8': 0,
-                '9': 1,
-              },
-            },
-          },
-        ])
+        expect(mocked(sessionService).updateDecisions).toHaveBeenCalledWith(
+          'aeio',
+          '+15551234567',
+          expectedPointJsonPatch
+        )
       })
 
       test('expect double-clicking checkbox puts points back', async () => {

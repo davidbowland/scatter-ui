@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Button from '@mui/material/Button'
-import Snackbar from '@mui/material/Snackbar'
+import Fab from '@mui/material/Fab'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
@@ -52,7 +52,7 @@ const Playing = ({ categories, decision, duration, makeChoice, setIsPlayingDone 
     }
     const currentCategoryPrompts = categories[category]
     return Array.from({ length: 10 }).map((_, idx) => (
-      <label key={idx} style={{ width: '400px' }}>
+      <label key={idx}>
         <TextField
           aria-readonly="true"
           autoComplete="postal-code"
@@ -99,7 +99,14 @@ const Playing = ({ categories, decision, duration, makeChoice, setIsPlayingDone 
       <Button fullWidth onClick={advanceCategory} variant="contained">
         Submit
       </Button>
-      <Snackbar message={`${timeRemaining}s`} open={true} />
+      <Fab
+        aria-label={`${timeRemaining} seconds remaining`}
+        color="secondary"
+        onClick={() => contentsRef.current!.scrollIntoView()}
+        sx={{ bottom: 16, left: 16, position: 'fixed' }}
+      >
+        {timeRemaining} s
+      </Fab>
     </Stack>
   )
 }

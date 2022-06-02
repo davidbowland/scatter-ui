@@ -128,7 +128,7 @@ const Session = ({
       )
     } else if (session?.status === 'playing') {
       return session.categories && !isPlayingDone ? (
-        <Stack spacing={2}>
+        <Stack spacing={2} sx={{ marginBottom: '2em' }}>
           <Playing
             categories={session.categories}
             decision={decision}
