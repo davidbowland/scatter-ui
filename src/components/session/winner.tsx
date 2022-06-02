@@ -21,7 +21,7 @@ const Winner = ({ winners }: WinnerProps): JSX.Element => {
           <CardContent>
             <Stack spacing={2}>
               <Typography component="div" variant="h4">
-                The winner is:
+                {winners.length === 1 ? 'The winner is:' : 'The winners are:'}
               </Typography>
               <Typography component="div" variant="h5">
                 {winners.join(' & ')}

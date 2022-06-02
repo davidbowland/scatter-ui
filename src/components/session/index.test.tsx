@@ -571,6 +571,19 @@ describe('Session component', () => {
         expect(await screen.findByText(/15552223333/i)).toBeInTheDocument()
       })
 
+      test('expect multiple winner message when multiple winners selected', async () => {
+        mocked(sessionService).fetchSession.mockResolvedValueOnce({
+          ...session,
+          status: 'winner',
+          winners: ['+15552223333', '+15552223334'],
+        })
+        render(<GameSession sessionId={sessionId} setAuthState={mockSetAuthState} setShowLogin={mockSetShowLogin} />)
+
+        expect(await screen.findByText(/The winners are:/i)).toBeInTheDocument()
+        expect(await screen.findByText(/15552223333/i)).toBeInTheDocument()
+        expect(await screen.findByText(/15552223334/i)).toBeInTheDocument()
+      })
+
       test('expect play again navigates', async () => {
         mocked(sessionService).fetchSession.mockResolvedValueOnce({
           ...session,
