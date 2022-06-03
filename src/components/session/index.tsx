@@ -68,7 +68,7 @@ const Session = ({
       } else {
         try {
           const currentDecision = await fetchDecision(sessionId, loggedInUser!.attributes!.phone_number)
-          if (currentDecision != decisionInitial) {
+          if (jsonpatch.compare(currentDecision, decisionInitial).length > 0) {
             setDecision(currentDecision)
             setDecisionInitial(currentDecision)
           }
