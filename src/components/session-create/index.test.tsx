@@ -84,6 +84,10 @@ describe('SessionCreate component', () => {
       await act(async () => {
         fireEvent.change(playersSliderInput, { target: { value: 4 } })
       })
+      const textUpdateCheckbox = (await screen.findByLabelText(/Send text message updates/i)) as HTMLInputElement
+      await act(async () => {
+        textUpdateCheckbox.click()
+      })
       const playButton = (await screen.findByText(/Start game/i, { selector: 'button' })) as HTMLButtonElement
       await act(async () => {
         playButton.click()
@@ -91,6 +95,7 @@ describe('SessionCreate component', () => {
 
       expect(mocked(sessionService).createSession).toHaveBeenCalledWith({
         rounds: 5,
+        textUpdates: false,
         timeLimit: 30,
         userCount: 4,
       })

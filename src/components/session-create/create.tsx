@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import Alert from '@mui/material/Alert'
 import Button from '@mui/material/Button'
+import Checkbox from '@mui/material/Checkbox'
 import CircularProgress from '@mui/material/CircularProgress'
+import FormControlLabel from '@mui/material/FormControlLabel'
 import Slider from '@mui/material/Slider'
 import Snackbar from '@mui/material/Snackbar'
 import Stack from '@mui/material/Stack'
@@ -22,6 +24,7 @@ const Create = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState(false)
   const [userIdErrors, setUserIdErrors] = useState<UserIds>({})
   const [roundCount, setRoundCount] = useState(3)
+  const [sendTextUpdates, setSendTextUpdates] = useState(true)
   const [successMessage, setSuccessMessage] = useState<string | undefined>(undefined)
   const [timeLimit, setTimeLimit] = useState(75)
   const [userCount, setUserCount] = useState(2)
@@ -43,6 +46,7 @@ const Create = (): JSX.Element => {
     try {
       const newSession: NewSession = {
         rounds: roundCount,
+        textUpdates: sendTextUpdates,
         timeLimit,
         userCount,
       }
@@ -131,6 +135,13 @@ const Create = (): JSX.Element => {
             valueLabelDisplay="auto"
           />
         </label>
+        <FormControlLabel
+          control={
+            <Checkbox checked={sendTextUpdates} onClick={(event: any) => setSendTextUpdates(event.target.checked)} />
+          }
+          disabled={isLoading}
+          label="Send text message updates"
+        />
         {userCount > 1 && (
           <Alert severity="info">
             You must distribute the game link to players. Enter the phone number of other players to text them the link!

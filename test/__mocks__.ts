@@ -161,6 +161,7 @@ export const expectedPointJsonPatch: PatchOperation[] = [
 
 export const newSession: NewSession = {
   rounds: 3,
+  textUpdates: true,
   timeLimit: 60,
   userCount: 2,
 }
@@ -240,6 +241,7 @@ export const session: SessionData = {
   owner: '178300fb-3ab6-41e2-bab6-231964026e42',
   rounds: 3,
   status: 'playing',
+  textUpdates: true,
   timeLimit: 60,
   userCount: 2,
 }
