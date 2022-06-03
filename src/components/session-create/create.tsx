@@ -166,7 +166,7 @@ const Create = (): JSX.Element => {
         >
           {isLoading ? 'Loading...' : 'Start game'}
         </Button>
-        <Typography style={{ textAlign: 'center' }}>Game sessions automatically expire after 72 hours</Typography>
+        <Typography style={{ textAlign: 'center' }}>Game sessions automatically expire after five days</Typography>
       </Stack>
       <Snackbar autoHideDuration={15_000} onClose={snackbarErrorClose} open={errorMessage !== undefined}>
         <Alert onClose={snackbarErrorClose} severity="error">
