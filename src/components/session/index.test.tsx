@@ -422,6 +422,10 @@ describe('Session component', () => {
         await act(async () => {
           fireEvent.change(playerSliderInput, { target: { value: 4 } })
         })
+        const textUpdateCheckbox = (await screen.findByLabelText(/Send text message updates/i)) as HTMLInputElement
+        await act(async () => {
+          textUpdateCheckbox.click()
+        })
         const updateButton = (await screen.findByText(/Update game options/i, {
           selector: 'button',
         })) as HTMLButtonElement
@@ -439,6 +443,16 @@ describe('Session component', () => {
             op: 'replace',
             path: '/userCount',
             value: 4,
+          },
+          {
+            op: 'test',
+            path: '/textUpdates',
+            value: true,
+          },
+          {
+            op: 'replace',
+            path: '/textUpdates',
+            value: false,
           },
         ])
       })

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Alert from '@mui/material/Alert'
 import Button from '@mui/material/Button'
+import Checkbox from '@mui/material/Checkbox'
 import CircularProgress from '@mui/material/CircularProgress'
 import Divider from '@mui/material/Divider'
+import FormControlLabel from '@mui/material/FormControlLabel'
 import Slider from '@mui/material/Slider'
 import Snackbar from '@mui/material/Snackbar'
 import Stack from '@mui/material/Stack'
@@ -96,6 +98,16 @@ const Owner = ({ session, sessionId, setSession }: OwnerProps): JSX.Element => {
             valueLabelDisplay="auto"
           />
         </label>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={workingSession.textUpdates}
+              onClick={(event: any) => setWorkingSession({ ...workingSession, textUpdates: event.target.checked })}
+            />
+          }
+          disabled={isLoading}
+          label="Send text message updates"
+        />
         <Button
           data-amplify-analytics-name="update-session-click"
           data-amplify-analytics-on="click"
