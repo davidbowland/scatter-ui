@@ -60,6 +60,7 @@ const Session = ({
       if (jsonPatchOperations.length > 0) {
         try {
           await updateDecisions(sessionId, loggedInUser!.attributes!.phone_number, jsonPatchOperations)
+          await refreshStatus()
           setDecisionInitial(decision)
         } catch (error) {
           console.error('refreshDecisions', error)
@@ -168,10 +169,6 @@ const Session = ({
   }
 
   useEffect(() => {
-    refreshStatus()
-  }, [isPlayingDone, isPointingDone])
-
-  useEffect(() => {
     refreshDecisions()
   }, [decision, loggedInUser])
 
@@ -179,6 +176,7 @@ const Session = ({
     Auth.currentAuthenticatedUser()
       .then(setLoggedInUser)
       .catch(() => null)
+    refreshStatus()
   }, [])
 
   return (

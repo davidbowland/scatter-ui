@@ -37,6 +37,9 @@ describe('Session component', () => {
 
     mocked(Logo).mockReturnValue(<>Logo</>)
     mocked(sessionService).fetchDecision.mockResolvedValue(decisions)
+  })
+
+  beforeEach(() => {
     mocked(sessionService).fetchSession.mockResolvedValue(session)
   })
 
@@ -186,7 +189,7 @@ describe('Session component', () => {
       })
 
       test('expect pointing done when submit clicked', async () => {
-        mocked(sessionService).fetchSession.mockResolvedValueOnce({
+        mocked(sessionService).fetchSession.mockResolvedValue({
           ...session,
           categories: {
             K: {
@@ -232,7 +235,7 @@ describe('Session component', () => {
 
     describe('pointing', () => {
       test('expect points passed to PATCH endpoint', async () => {
-        mocked(sessionService).fetchSession.mockResolvedValueOnce({
+        mocked(sessionService).fetchSession.mockResolvedValue({
           ...session,
           status: 'pointing',
         })
@@ -256,7 +259,7 @@ describe('Session component', () => {
       })
 
       test('expect double-clicking checkbox puts points back', async () => {
-        mocked(sessionService).fetchSession.mockResolvedValueOnce({
+        mocked(sessionService).fetchSession.mockResolvedValue({
           ...session,
           status: 'pointing',
         })
@@ -474,7 +477,7 @@ describe('Session component', () => {
 
     describe('winner', () => {
       test('expect winner message when winner selected', async () => {
-        mocked(sessionService).fetchSession.mockResolvedValueOnce({
+        mocked(sessionService).fetchSession.mockResolvedValue({
           ...session,
           status: 'winner',
           winners: ['+15552223333'],
@@ -486,7 +489,7 @@ describe('Session component', () => {
       })
 
       test('expect multiple winner message when multiple winners selected', async () => {
-        mocked(sessionService).fetchSession.mockResolvedValueOnce({
+        mocked(sessionService).fetchSession.mockResolvedValue({
           ...session,
           status: 'winner',
           winners: ['+15552223333', '+15552223334'],
@@ -499,7 +502,7 @@ describe('Session component', () => {
       })
 
       test('expect play again navigates', async () => {
-        mocked(sessionService).fetchSession.mockResolvedValueOnce({
+        mocked(sessionService).fetchSession.mockResolvedValue({
           ...session,
           status: 'winner',
           winners: ['+15552223333'],
@@ -517,8 +520,7 @@ describe('Session component', () => {
 
     describe('service errors', () => {
       test('expect error message on bad status', async () => {
-        mocked(Auth).currentAuthenticatedUser.mockResolvedValueOnce(user)
-        mocked(sessionService).fetchSession.mockResolvedValueOnce({
+        mocked(sessionService).fetchSession.mockResolvedValue({
           ...session,
           status: 'bad_status',
         } as any)
@@ -528,7 +530,6 @@ describe('Session component', () => {
       })
 
       test('expect error message on fetchDecisions reject', async () => {
-        mocked(Auth).currentAuthenticatedUser.mockResolvedValueOnce(user)
         mocked(sessionService).fetchDecision.mockRejectedValueOnce(undefined)
         render(<GameSession sessionId={sessionId} setAuthState={mockSetAuthState} setShowLogin={mockSetShowLogin} />)
 
@@ -536,7 +537,6 @@ describe('Session component', () => {
       })
 
       test('expect error message on updateDecisions reject', async () => {
-        mocked(Auth).currentAuthenticatedUser.mockResolvedValueOnce(user)
         mocked(sessionService).updateDecisions.mockRejectedValueOnce(undefined)
         render(<GameSession sessionId={sessionId} setAuthState={mockSetAuthState} setShowLogin={mockSetShowLogin} />)
 
