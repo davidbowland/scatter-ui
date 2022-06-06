@@ -95,6 +95,10 @@ const Playing = ({ categories, decision, duration, makeChoice, setIsPlayingDone 
       <Typography ref={contentsRef} variant="h2">
         Letter: {category}
       </Typography>
+      <Typography>
+        Enter words or phrases for the categories below that begin with the letter <strong>{category}</strong>. If your
+        phrase has multiple words that begin with <strong>{category}</strong>, that is worth multiple points.
+      </Typography>
       {getPrompts()}
       <Button fullWidth onClick={advanceCategory} variant="contained">
         Submit

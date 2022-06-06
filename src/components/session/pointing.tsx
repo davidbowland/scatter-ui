@@ -102,6 +102,10 @@ const Pointing = ({
         <Typography sx={{ textAlign: 'center' }} variant="h6">
           Choose which responses merit points
         </Typography>
+        <Typography>
+          Uncheck the box next to any responses that are invalid. Responses with the same first letter multiple times
+          are worth multiple points while duplicate responses are worth zero points.
+        </Typography>
         {Object.keys(categories).map((letter: string) =>
           Object.keys(categories[letter]).map((categoryIndex: string) => (
             <TableContainer key={`${letter}-${categoryIndex}`} sx={{ maxHeight: 440 }}>

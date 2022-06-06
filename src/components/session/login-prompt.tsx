@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
+import AbcIcon from '@mui/icons-material/Abc'
 import Button from '@mui/material/Button'
-import DoneAllIcon from '@mui/icons-material/DoneAll'
 import FollowTheSignsOutlinedIcon from '@mui/icons-material/FollowTheSignsOutlined'
 import LoginIcon from '@mui/icons-material/Login'
 import Stack from '@mui/material/Stack'
@@ -70,11 +70,11 @@ const LoginPrompt = ({ initialUserId, setAuthState, setLoggedInUser, setShowLogi
           />
         </label>
         <Button
-          data-amplify-analytics-name="lets-choose-click"
+          data-amplify-analytics-name="lets-play-click"
           data-amplify-analytics-on="click"
           fullWidth
           onClick={playClick}
-          startIcon={<DoneAllIcon />}
+          startIcon={<AbcIcon />}
           variant="contained"
         >
           Let&apos;s play!
