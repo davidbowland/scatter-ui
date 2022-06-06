@@ -211,6 +211,7 @@ export const session: SessionData = {
       responses: {
         K: {
           '2': 'Kurry',
+          '4': 'Khe Same Answer',
         },
         I: {},
         N: {},
@@ -222,6 +223,7 @@ export const session: SessionData = {
         K: {
           '2': 'Kominican Republic',
           '3': 'Kogs',
+          '4': 'Khe Same Answer',
           '5': 'Kavid Kuchovny',
           '10': 'Kaggers',
         },

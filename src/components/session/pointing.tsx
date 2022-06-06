@@ -29,15 +29,24 @@ const Pointing = ({
   setIsPointingDone,
   userPhoneNumber,
 }: PointingProps): JSX.Element => {
-  const calculatePointsFromValue = (displayValue: string | undefined, letter: string): number => {
-    if (displayValue === undefined) {
-      return 0
+  const calculatePointsFromValue = (
+    phoneNumber: string,
+    letter: string,
+    categoryIndex: string
+  ): { displayValue: string; pointValue: number } => {
+    const displayValue = decisions[phoneNumber].responses[letter][categoryIndex]?.toUpperCase()
+    const otherValues = Object.keys(decisions)
+      .filter((phoneNumber) => phoneNumber === userPhoneNumber)
+      .map((phoneNumber) => decisions[phoneNumber].responses[letter][categoryIndex]?.toUpperCase())
+
+    if (displayValue === undefined || phoneNumber === userPhoneNumber || otherValues.indexOf(displayValue) >= 0) {
+      return { displayValue, pointValue: 0 }
     }
     const splitDisplayValue = displayValue.split(/\s+/)
     if (splitDisplayValue[0].startsWith(letter)) {
-      return splitDisplayValue.filter((word) => word.startsWith(letter)).length
+      return { displayValue, pointValue: splitDisplayValue.filter((word) => word.startsWith(letter)).length }
     }
-    return 0
+    return { displayValue, pointValue: 0 }
   }
 
   const compilePoints = (): CategoryPointsObject => {
@@ -47,9 +56,8 @@ const Pointing = ({
       for (const letter of Object.keys(categories)) {
         newPoints[phoneNumber][letter] = {}
         for (const categoryIndex of Object.keys(categories[letter])) {
-          const displayValue = decisions[phoneNumber].responses[letter][categoryIndex]?.toUpperCase()
-          newPoints[phoneNumber][letter][categoryIndex] =
-            phoneNumber === userPhoneNumber ? 0 : calculatePointsFromValue(displayValue, letter)
+          const { pointValue } = calculatePointsFromValue(phoneNumber, letter, categoryIndex)
+          newPoints[phoneNumber][letter][categoryIndex] = pointValue
         }
       }
     }
@@ -59,8 +67,7 @@ const Pointing = ({
   const generateTableBody = (letter: string, categoryIndex: string): JSX.Element[] => {
     return Object.keys(decisions).map(
       (phoneNumber: string): JSX.Element => {
-        const displayValue = decisions[phoneNumber].responses[letter][categoryIndex]?.toUpperCase()
-        const pointValue = calculatePointsFromValue(displayValue, letter)
+        const { displayValue, pointValue } = calculatePointsFromValue(phoneNumber, letter, categoryIndex)
         return (
           <TableRow hover key={phoneNumber} role="checkbox">
             <TableCell>
@@ -70,7 +77,7 @@ const Pointing = ({
                     defaultChecked={phoneNumber !== userPhoneNumber && pointValue > 0}
                     disabled={phoneNumber === userPhoneNumber}
                     onClick={(event: any): void => {
-                      const itemPoints = event.target.checked ? calculatePointsFromValue(displayValue, letter) : 0
+                      const itemPoints = event.target.checked ? pointValue : 0
                       setPoints({
                         ...points,
                         [phoneNumber]: {
