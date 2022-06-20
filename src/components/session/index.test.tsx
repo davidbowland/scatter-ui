@@ -88,9 +88,9 @@ describe('Session component', () => {
         await act(async () => {
           fireEvent.change(userIdInput, { target: { value: '+1555' } })
         })
-        const chooseButton = (await screen.findByText(/Let's play!/i, { selector: 'button' })) as HTMLButtonElement
+        const playButton = (await screen.findByText(/Let's play!/i, { selector: 'button' })) as HTMLButtonElement
         await act(async () => {
-          chooseButton.click()
+          playButton.click()
         })
 
         expect(await screen.findByText(/Invalid phone number. Be sure to include area code./i)).toBeInTheDocument()
@@ -103,9 +103,9 @@ describe('Session component', () => {
         await act(async () => {
           fireEvent.change(userIdInput, { target: { value: userId } })
         })
-        const chooseButton = (await screen.findByText(/Let's play!/i, { selector: 'button' })) as HTMLButtonElement
+        const playButton = (await screen.findByText(/Let's play!/i, { selector: 'button' })) as HTMLButtonElement
         await act(async () => {
-          chooseButton.click()
+          playButton.click()
         })
 
         expect(await screen.findByText(/Letter: K/i)).toBeInTheDocument()
@@ -118,9 +118,9 @@ describe('Session component', () => {
       test('expect clicking sign in invokes Authenticator', async () => {
         render(<GameSession sessionId={sessionId} setAuthState={mockSetAuthState} setShowLogin={mockSetShowLogin} />)
 
-        const chooseButton = (await screen.findByText(/Sign in/i, { selector: 'button' })) as HTMLButtonElement
+        const signInButton = (await screen.findByText(/Sign in/i, { selector: 'button' })) as HTMLButtonElement
         await act(async () => {
-          chooseButton.click()
+          signInButton.click()
         })
 
         expect(mockSetAuthState).toHaveBeenCalledWith('signIn')
@@ -132,9 +132,9 @@ describe('Session component', () => {
       test('expect clicking sign up invokes Authenticator', async () => {
         render(<GameSession sessionId={sessionId} setAuthState={mockSetAuthState} setShowLogin={mockSetShowLogin} />)
 
-        const chooseButton = (await screen.findByText(/Sign up/i, { selector: 'button' })) as HTMLButtonElement
+        const signUpButton = (await screen.findByText(/Sign up/i, { selector: 'button' })) as HTMLButtonElement
         await act(async () => {
-          chooseButton.click()
+          signUpButton.click()
         })
 
         expect(mockSetAuthState).toHaveBeenCalledWith('signUp')
@@ -160,9 +160,10 @@ describe('Session component', () => {
       test('expect second prompt shown when submit clicked', async () => {
         render(<GameSession sessionId={sessionId} setAuthState={mockSetAuthState} setShowLogin={mockSetShowLogin} />)
 
+        expect(await screen.findByText(/Letter: K/i)).toBeInTheDocument()
         const submitButton = (await screen.findByText(/Submit/i)) as HTMLButtonElement
         await act(async () => {
-          submitButton.click()
+          await submitButton.click()
         })
 
         expect(await screen.findByText(/Letter: I/i)).toBeInTheDocument()
@@ -188,7 +189,7 @@ describe('Session component', () => {
         expect(window.HTMLElement.prototype.scrollIntoView).toHaveBeenCalled()
       })
 
-      test('expect pointing done when submit clicked', async () => {
+      test('expect playing done when submit clicked', async () => {
         mocked(sessionService).fetchSession.mockResolvedValue({
           ...session,
           categories: {
@@ -200,12 +201,13 @@ describe('Session component', () => {
         })
         render(<GameSession sessionId={sessionId} setAuthState={mockSetAuthState} setShowLogin={mockSetShowLogin} />)
 
+        expect(await screen.findByText(/Letter: K/i)).toBeInTheDocument()
         const submitButton = (await screen.findByText(/Submit/i)) as HTMLButtonElement
         await act(async () => {
-          submitButton.click()
+          await submitButton.click()
         })
 
-        expect(screen.queryByText(/Letter: K/i)).not.toBeInTheDocument()
+        await waitFor(() => expect(screen.queryByText(/Letter: K/i)).not.toBeInTheDocument())
       })
 
       test('expect game results passed to PATCH endpoint', async () => {
@@ -423,17 +425,17 @@ describe('Session component', () => {
 
         const playerSliderInput = (await screen.findByLabelText(/Number of players/i)) as HTMLInputElement
         await act(async () => {
-          fireEvent.change(playerSliderInput, { target: { value: 4 } })
+          await fireEvent.change(playerSliderInput, { target: { value: 4 } })
         })
         const textUpdateCheckbox = (await screen.findByLabelText(/Send text message updates/i)) as HTMLInputElement
         await act(async () => {
-          textUpdateCheckbox.click()
+          await textUpdateCheckbox.click()
         })
         const updateButton = (await screen.findByText(/Update game options/i, {
           selector: 'button',
         })) as HTMLButtonElement
         await act(async () => {
-          updateButton.click()
+          await updateButton.click()
         })
 
         expect(mocked(sessionService).updateSession).toHaveBeenCalledWith(sessionId, [
@@ -468,7 +470,7 @@ describe('Session component', () => {
           selector: 'button',
         })) as HTMLButtonElement
         await act(async () => {
-          updateButton.click()
+          await updateButton.click()
         })
 
         expect(await screen.findByText(/Error updating game session/i)).toBeInTheDocument()
@@ -539,6 +541,12 @@ describe('Session component', () => {
       test('expect error message on updateDecisions reject', async () => {
         mocked(sessionService).updateDecisions.mockRejectedValueOnce(undefined)
         render(<GameSession sessionId={sessionId} setAuthState={mockSetAuthState} setShowLogin={mockSetShowLogin} />)
+
+        expect(await screen.findByText(/Letter: K/i)).toBeInTheDocument()
+        const submitButton = (await screen.findByText(/Submit/i)) as HTMLButtonElement
+        await act(async () => {
+          await submitButton.click()
+        })
 
         expect(await screen.findByText(/Error saving categories/i)).toBeInTheDocument()
       })
